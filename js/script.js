@@ -1,6 +1,6 @@
 const scoreEl = document.querySelector('#scoreEl')
 const canvas = document.querySelector('canvas')
-const c = canvas.getContext('2d')
+const ctx = canvas.getContext('2d')
 canvas.width = 1024
 canvas.height = 576
 
@@ -28,22 +28,22 @@ class Player {
   }    
     
   draw() {
-    c.save()
-    c.globalAlpha = this.opacity
-    c.translate(
+    ctx.save()
+    ctx.globalAlpha = this.opacity
+    ctx.translate(
       player.position.x + player.width / 2, 
       player.position.y + player.height / 2)
-    c.rotate(this.rotation)
-    c.translate(
+    ctx.rotate(this.rotation)
+    ctx.translate(
       -player.position.x - player.width / 2, 
       -player.position.y - player.height / 2)
-    c.drawImage(
+    ctx.drawImage(
       this.image, 
       this.position.x, 
       this.position.y, 
       this.width, 
       this.height)
-    c.restore()
+    ctx.restore()
   }
   update() {
     if (this.image) {
@@ -60,11 +60,11 @@ class Projectile {
     this.radius = 4
   }
   draw() {
-    c.beginPath()
-    c.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2)
-    c.fillStyle = '#ff4500'
-    c.fill()
-    c.closePath()
+    ctx.beginPath()
+    ctx.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2)
+    ctx.fillStyle = '#ff4500'
+    ctx.fill()
+    ctx.closePath()
   }
   update() {
     this.draw()
@@ -74,23 +74,23 @@ class Projectile {
 }
 
 class Particle {
-  constructor({ position, velocity, radius, color, fades }) {
+  constructor({ position, velocity, radius, colour, fades }) {
     this.position = position
     this.velocity = velocity
     this.radius = radius
-    this.color = color
+    this.colour = colour
     this.opacity = 1
     this.fades = fades
   }
   draw() {
-    c.save()
-    c.globalAlpha = this.opacity
-    c.beginPath()
-    c.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2)
-    c.fillStyle = this.color
-    c.fill()
-    c.closePath()
-    c.restore()
+    ctx.save()
+    ctx.globalAlpha = this.opacity
+    ctx.beginPath()
+    ctx.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2)
+    ctx.fillStyle = this.colour
+    ctx.fill()
+    ctx.closePath()
+    ctx.restore()
   }
   update() {
     this.draw()
@@ -108,8 +108,8 @@ class InvaderProjectile {
     this.height = 10
   }
   draw() {
-    c.fillStyle = 'ffd700'
-    c.fillRect(this.position.x, this.position.y, this.width, this.height)
+    ctx.fillStyle = 'ffd700'
+    ctx.fillRect(this.position.x, this.position.y, this.width, this.height)
   }
   update() {
     this.draw()
@@ -132,13 +132,13 @@ class Invader {
       this.width = image.width * scale
       this.height = image.height * scale
       this.position = { 
-          x: position.x,
-          y: position.y
+        x: position.x,
+        y: position.y
       }
     }
   }    
   draw() {
-    c.drawImage(
+    ctx.drawImage(
         this.image, 
         this.position.x, 
         this.position.y, 
@@ -218,14 +218,14 @@ class Bomb {
     this.position = position
     this.velocity = velocity
     this.radius = 30
-    this.color = '#ff0000'
+    this.colour = '#ffd700'
   }
   draw() {
-    c.beginPath()
-    c.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2)
-    c.closePath()
-    c.fillStyle = this.color
-    c.fill()
+    ctx.beginPath()
+    ctx.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2)
+    ctx.closePath()
+    ctx.fillStyle = this.colour
+    ctx.fill()
   }
   update() {
     this.draw()
@@ -298,11 +298,11 @@ for (let i = 0; i < 100; i++) {
       y: 0.3        
     },
     radius: Math.random() * 2,
-    color: '#ffffff'       
+    colour: '#ffffff'       
   }))
 }
 
-function createParticles({ object, color, fades }) {
+function createParticles({ object, colour, fades }) {
   for (let i = 0; i < 15; i++) {
     particles.push(new Particle({
       position: {
@@ -314,7 +314,7 @@ function createParticles({ object, color, fades }) {
         y: (Math.random() - 0.5) * 2          
       },
       radius: Math.random() * 3,
-      color: color || '#baa0de',
+      colour: colour || '#baa0de',
       fades
     }))
   }
@@ -323,8 +323,8 @@ function createParticles({ object, color, fades }) {
 function animate() {
   if (!game.active) return
   requestAnimationFrame(animate)
-  c.fillStyle = '#000000'
-  c.fillRect(0, 0, canvas.width, canvas.height)
+  ctx.fillStyle = '#000000'
+  ctx.fillRect(0, 0, canvas.width, canvas.height)
 
   for (let i = bombs.length - 1; i >= 0; i--) {
     const bomb = bombs[i]
@@ -368,7 +368,7 @@ function animate() {
       }, 2000)
       createParticles({
         object: player,
-        color: 'ff4500',
+        colour: 'ff4500',
         fades: true
       })
     }
@@ -409,7 +409,7 @@ function animate() {
               const scoreLabel = document.createElement('label')
               scoreLabel.innerHTML = 100
               scoreLabel.style.position = 'absolute'
-              scoreLabel.style.color = '#ffffff'
+              scoreLabel.style.colour = '#ffffff'
               scoreLabel.style.top = invader.position.y + 'px'
               scoreLabel.style.left = invader.position.x + 'px'
               scoreLabel.style.userSelect = 'none'
