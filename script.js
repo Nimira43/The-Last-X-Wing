@@ -31,21 +31,20 @@ class Player {
     c.save()
     c.globalAlpha = this.opacity
     c.translate(
-        player.position.x + player.width / 2, 
-        player.position.y + player.height / 2)
+      player.position.x + player.width / 2, 
+      player.position.y + player.height / 2)
     c.rotate(this.rotation)
     c.translate(
-        -player.position.x - player.width / 2, 
-        -player.position.y - player.height / 2)
+      -player.position.x - player.width / 2, 
+      -player.position.y - player.height / 2)
     c.drawImage(
-        this.image, 
-        this.position.x, 
-        this.position.y, 
-        this.width, 
-        this.height)
+      this.image, 
+      this.position.x, 
+      this.position.y, 
+      this.width, 
+      this.height)
     c.restore()
   }
-
   update() {
     if (this.image) {
       this.draw()
@@ -60,7 +59,6 @@ class Projectile {
     this.velocity = velocity
     this.radius = 4
   }
-  
   draw() {
     c.beginPath()
     c.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2)
@@ -68,7 +66,6 @@ class Projectile {
     c.fill()
     c.closePath()
   }
-
   update() {
     this.draw()
     this.position.x += this.velocity.x
@@ -85,7 +82,6 @@ class Particle {
     this.opacity = 1
     this.fades = fades
   }
-  
   draw() {
     c.save()
     c.globalAlpha = this.opacity
@@ -96,7 +92,6 @@ class Particle {
     c.closePath()
     c.restore()
   }
-
   update() {
     this.draw()
     this.position.x += this.velocity.x
@@ -112,12 +107,10 @@ class InvaderProjectile {
     this.width = 3
     this.height = 10
   }
-  
   draw() {
     c.fillStyle = 'ffd700'
     c.fillRect(this.position.x, this.position.y, this.width, this.height)
   }
-
   update() {
     this.draw()
     this.position.x += this.velocity.x
@@ -131,7 +124,6 @@ class Invader {
       x: 0,
       y: 0
     }
-    
     const image = new Image()
     image.src = './img/invader.png'
     image.onload = () => {
@@ -145,7 +137,6 @@ class Invader {
       }
     }
   }    
-  
   draw() {
     c.drawImage(
         this.image, 
@@ -155,7 +146,6 @@ class Invader {
         this.height
     )
   }
-
   update({ velocity }) {
     if (this.image) {
       this.draw()
@@ -163,7 +153,6 @@ class Invader {
       this.position.y += velocity.y
     }
   }
-
   shoot(invaderProjectiles) {
     invaderProjectiles.push(
       new InvaderProjectile({
@@ -355,14 +344,14 @@ function animate() {
     } else {
       particle.update()
     }
-  });
+  })
 
   invaderProjectiles.forEach((invaderProjectile, index) => {
     if (invaderProjectile.position.y + invaderProjectile.height >= canvas.height) {
       setTimeout(() => {
         invaderProjectiles.splice(index, 1)
       }, 0)
-    } else invaderProjectile.update();
+    } else invaderProjectile.update()
 
     if (
       invaderProjectile.position.y + invaderProjectile.height >= player.position.y &&
@@ -370,12 +359,12 @@ function animate() {
       invaderProjectile.position.x <= player.position.x + player.width
     ) {
       setTimeout(() => {
-        projectiles.splice(index, 1);
-        player.opacity = 0;
-        game.over = true;
+        projectiles.splice(index, 1)
+        player.opacity = 0
+        game.over = true
       }, 0)
       setTimeout(() => {
-        game.active = false;
+        game.active = false
       }, 2000)
       createParticles({
         object: player,
@@ -391,7 +380,7 @@ function animate() {
         projectiles.splice(index, 1)
       }, 0)
     } else {
-        projectile.update()
+      projectile.update()
     }
   })
 
@@ -415,24 +404,23 @@ function animate() {
             const projectileFound = projectiles.find((projectiles2) => projectiles2 === projectile)
 
             if (invaderFound && projectileFound) {
-              score += 100;
-              scoreEl.innerHTML = score;
-
-              const scoreLabel = document.createElement('label');
-              scoreLabel.innerHTML = 100;
-              scoreLabel.style.position = 'absolute';
-              scoreLabel.style.color = 'white';
-              scoreLabel.style.top = invader.position.y + 'px';
-              scoreLabel.style.left = invader.position.x + 'px';
-              scoreLabel.style.userSelect = 'none';
-              document.querySelector('#parentDiv').appendChild(scoreLabel);
+              score += 100
+              scoreEl.innerHTML = score
+              const scoreLabel = document.createElement('label')
+              scoreLabel.innerHTML = 100
+              scoreLabel.style.position = 'absolute'
+              scoreLabel.style.color = '#ffffff'
+              scoreLabel.style.top = invader.position.y + 'px'
+              scoreLabel.style.left = invader.position.x + 'px'
+              scoreLabel.style.userSelect = 'none'
+              document.querySelector('#parentDiv').appendChild(scoreLabel)
 
               gsap.to(scoreLabel, {
                 opacity: 0,
                 y: -30,
                 duration: 0.75,
                 onComplete: () => {
-                  document.querySelector('#parentDiv').removeChild(scoreLabel);    
+                  document.querySelector('#parentDiv').removeChild(scoreLabel)
                 }
               })
 
@@ -446,7 +434,7 @@ function animate() {
               if (grid.invaders.length > 0) {
                 const firstInvader = grid.invaders[0];
                 const lastInvader = grid.invaders[grid.invaders.length - 1];
-                grid.width = lastInvader.position.x - firstInvader.position.x + lastInvader.width;  
+                grid.width = lastInvader.position.x - firstInvader.position.x + lastInvader.width
                 grid.position.x = firstInvader.position.x
               } else {
                 grids.splice(gridIndex, 1)
